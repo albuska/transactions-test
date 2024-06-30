@@ -4,9 +4,9 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/transactions-test/",
+  base: "/transactions-test",
   server: {
-    open: "/transactions-test/",
+    open: "/transactions-test",
     port: 3000,
   },
 });

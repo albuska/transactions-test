@@ -1,7 +1,14 @@
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { TransactionBoard } from "./components/TransactionBoard";
+import { Icons } from "./components/Icons";
+
 function App() {
   return (
     <>
-      <h1>Hello world</h1>
+      <Icons />
+      <TransactionBoard />
+      <ToastContainer />
     </>
   );
 }
