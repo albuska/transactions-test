@@ -4,10 +4,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icons } from "./components/Icons";
 import { SharedLayout } from "./components/SharedLayout";
-// import PrivateRouter from "./utils/router/privateRouter.tsx";
+// import { PrivateRoute } from "./utils/router/PrivateRoute";
+// import { RestrictedRoute } from "./utils/router/RestrictedRoute";
 
 function App() {
-  const Home = lazy(() => import("./pages/Home.tsx"));
+  // const Home = lazy(() => import("./pages/Home.tsx"));
   const TransactionsBoard = lazy(() => import("./pages/TransactionsBoard.tsx"));
   const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
@@ -16,10 +17,19 @@ function App() {
       <Icons />
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<Home />} />
-          {/* <Route element={<PrivateRouter />}> */}
-          <Route path="board" element={<TransactionsBoard />} />
-          {/* </Route> */}
+          <Route index element={<TransactionsBoard />} />
+          {/* <Route
+            index
+            element={
+              <RestrictedRoute redirectTo="/board" component={<Home />} />
+            }
+          /> */}
+          {/* <Route
+            path="/board"
+            element={
+              <PrivateRoute redirectTo="/" component={<TransactionsBoard />} />
+            }
+          /> */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

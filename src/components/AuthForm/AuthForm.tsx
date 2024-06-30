@@ -15,7 +15,6 @@ import {
 } from "./authForm.styles";
 import { authSchema } from "../../constants";
 import { registerUser } from "../../services/api";
-import useAuthStore from "../../useAuthStore";
 
 export type AuthFormValues = {
   email: string;
@@ -24,7 +23,6 @@ export type AuthFormValues = {
 
 const AuthForm = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
-  const { registerZustandUser } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -44,7 +42,6 @@ const AuthForm = () => {
   const onSubmit = async (formData: AuthFormValues) => {
     console.log(formData, "data");
     await registerUser(formData);
-    registerZustandUser();
   };
 
   return (
