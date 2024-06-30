@@ -19,6 +19,7 @@ import { Icon } from "../Icon";
 import { EditModal } from "../EditModal";
 import { DeleteModal } from "../DeleteModal";
 import { capitalizeFirstLetter } from "../../utils";
+import { deleteTransaction } from "../../services/api";
 
 interface ITransactionsTable {
   data: ITransaction[];
@@ -66,7 +67,7 @@ const TransactionsTable: FC<ITransactionsTable> = ({
   };
 
   const handleDeleteTransaction = async (id: number) => {
-    // await deleteTransaction(id);
+    await deleteTransaction(id);
     setIsOpenDeleteModal(false);
     setData((prevTransactions) =>
       prevTransactions.filter((transaction) => transaction.transactionid !== id)

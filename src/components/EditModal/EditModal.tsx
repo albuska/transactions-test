@@ -14,6 +14,7 @@ import { Icon } from "../Icon";
 import { ETransactionStatus, ITransaction } from "../../models";
 import { STATUS_TRANSACTIONS, selectStatusSchema } from "../../constants";
 import { DeleteText } from "../DeleteModal/deleteModal.styles";
+import { updateTransactionStatus } from "../../services/api";
 
 interface IEditModal {
   onClose: () => void;
@@ -58,7 +59,7 @@ const EditModal: FC<IEditModal> = ({
     },
   });
 
-  const onSubmit = (dataOfStatus: FormValues) => {
+  const onSubmit = async (dataOfStatus: FormValues) => {
     let changedStatus: ETransactionStatus;
 
     if (dataOfStatus.status) {
@@ -70,12 +71,17 @@ const EditModal: FC<IEditModal> = ({
         changedStatus = ETransactionStatus.PENDING;
       }
 
-      setSelectedTransaction((prevTransaction) => {
-        if (prevTransaction) {
-          const updatedTransaction = {
-            ...prevTransaction,
-            status: changedStatus,
-          };
+      if (selectedTransaction) {
+        const updatedTransaction = {
+          ...selectedTransaction,
+          status: changedStatus,
+        };
+
+        try {
+          await updateTransactionStatus(
+            selectedTransaction.transactionid,
+            changedStatus
+          );
 
           const updatedData = data.map((item) =>
             item.transactionid === updatedTransaction.transactionid
@@ -83,10 +89,11 @@ const EditModal: FC<IEditModal> = ({
               : item
           );
           setData(updatedData);
-          return updatedTransaction;
+          setSelectedTransaction(updatedTransaction);
+        } catch (error) {
+          console.error("Failed to update transaction status:", error);
         }
-        return prevTransaction;
-      });
+      }
 
       setShouldCloseModal(true);
     }

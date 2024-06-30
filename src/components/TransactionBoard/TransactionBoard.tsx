@@ -24,6 +24,7 @@ import {
 import { ITransaction } from "../../models";
 import { normalizeKeys } from "../../utils";
 import { COLUMNS } from "../../constants";
+import { getTransactions, saveTransactionsToDB } from "../../services/api";
 
 const TransactionBoard = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -122,14 +123,24 @@ const TransactionBoard = () => {
       Papa.parse(file, {
         header: true,
         dynamicTyping: true,
-        complete: (results: ParseResult<ITransaction>) => {
+        complete: async (results: ParseResult<ITransaction>) => {
           const normalizedData = normalizeKeys(results.data);
-          setData(normalizedData);
+          await saveTransactionsToDB(normalizedData);
+          fetchTransactions();
         },
         error: (error: ParseError) => {
           console.error("Error parsing CSV file", error);
         },
       });
+    }
+  };
+
+  const fetchTransactions = async () => {
+    try {
+      const data = await getTransactions();
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching transactions in App component:", error);
     }
   };
 
@@ -157,7 +168,7 @@ const TransactionBoard = () => {
   };
 
   return (
-    <TransactionBoardContainer className="main-container">
+    <TransactionBoardContainer>
       <TransactionBoardContainerTopBox></TransactionBoardContainerTopBox>
       <TransactionBoardMainBoxLeft>
         <TransactionBoardTable>
